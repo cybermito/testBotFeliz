@@ -1,5 +1,3 @@
-from ast import Call
-from lib2to3.pgen2 import token
 import logging
 from telegram.ext import Updater, CallbackContext, CommandHandler, MessageHandler
 from telegram import Update
@@ -25,7 +23,6 @@ def adios(update: Update, context: CallbackContext):
 
 def help(update:Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Dime palabras o frases tanto bonitas como feas, responderé con la emoción correspondiente. Si no la entiendo intentaré aprenderla para ampliar mi eficacia.")
-
 
 # This function will pass your text to the machine learning model
 # and return the top result with the highest confidence
@@ -186,6 +183,14 @@ def respuesta(recognized):
 
 def run():
 
+    #Creamos los CommandHandler /start, /adios, /help
+    start_handler = CommandHandler('start', start)
+    dispatcher.add_handler(start_handler)
+
+    adios_handler = CommandHandler('adios', adios)
+    
+
+
     siEntrenado = checkModel(API_KEY)
 
     if siEntrenado['status'] == 'ready to use':
@@ -196,6 +201,9 @@ def run():
             respuesta(recognized)
     else:
         print(siEntrenado)
+    
+    updater.start_polling()
+    updater.idle()
     
 
 if __name__ == '__main__':
