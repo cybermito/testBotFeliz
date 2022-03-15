@@ -17,6 +17,19 @@ dispatcher = updater.dispatcher
 #responderán a los comandos /start, /adios, /help.
 def start(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Hola, soy un bot, por favor habla conmigo")
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Escribe /help para obtener ayuda en el funcionamiento")
+    siEntrenado = checkModel(API_KEY)
+
+    if siEntrenado['status'] == 'ready to use':
+        context.bot.send_message(chat_id=update.effective_chat.id, text="¿Que quieres decirme?")
+        
+        texto = input('¿Que quieres decirme? ')
+
+        recognized = classify(texto)
+        if recognized != None:
+            respuesta(recognized)
+    else:
+        print(siEntrenado)
 
 def adios(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id, text="¿Ya te vas? ¡Quedate un ratito más!")
@@ -191,16 +204,7 @@ def run():
     
 
 
-    siEntrenado = checkModel(API_KEY)
-
-    if siEntrenado['status'] == 'ready to use':
-        texto = input('¿Que quieres decirme? ')
-
-        recognized = classify(texto)
-        if recognized != None:
-            respuesta(recognized)
-    else:
-        print(siEntrenado)
+    
     
     updater.start_polling()
     updater.idle()
