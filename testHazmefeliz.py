@@ -9,8 +9,6 @@ from constantes import API_KEY, CYBERMITOTOKEN
 #de conexión con la API de Telegram
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
-AGREGAR = range(0)
-
 #Creamos los objetos updater y dispatcher para la comunicación con el Bot.
 updater = Updater(token=CYBERMITOTOKEN, use_context=True)
 dispatcher = updater.dispatcher
@@ -63,15 +61,9 @@ def mensajeRecibido(update: Update, context: CallbackContext):
                 context.bot.sendPhoto(chat_id=update.effective_chat.id, photo=imagen)
         
     else:
-        print(update.message.reply_text(
-            'No entendi lo que me digiste'
-            '¿Quieres agregar el texto a la lista de aprendizaje? (Si/no)',
-            reply_markup=ReplyKeyboardMarkup(
-                reply_keyboard, one_time_keyboard=True, input_field_placeholder='Si o No?'
-            ),
-        ))
-        print(AGREGAR)
-        return AGREGAR
+        context.bot.send_message(chat_id=update.effective_chat.id, text="No entendí lo que dijiste")
+        context.bot.send_message(chat_id=update.effective_chat.id, text="¿Quieres agregar la frase/palabra a mi aprendizaje?")
+
 
 
 
